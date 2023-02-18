@@ -12,16 +12,15 @@ I try to make every implementation concise, well-commented, novice-friendly and 
 
 
 
-![image-20230218123237241](.\imgs\image-20230218123237241.png)
+![](https://github.com/steveflyer/implement_ml_with_steve/blob/main/imgs/image-20230218123237241.png)
 
 
 
 In my implementation, if you're confused by any variable or function, just hover on it and you'll find the documents are quite informative.
 
-![image-20230218123326338](.\imgs\image-20230218123326338.png)
+![](https://github.com/steveflyer/implement_ml_with_steve/blob/main/imgs/image-20230218123326338.png))
 
 Hope you guys can play with these algorithms for fun.
-
 
 
 The algorithms are written in python packages, and I will try to make some jupyter notebooks in a technical blog style for demonstrating them.
