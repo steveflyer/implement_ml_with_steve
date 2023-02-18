@@ -4,7 +4,7 @@ from pathlib import Path
 # configurations
 __DATA_DIR_PATH = Path(__file__).parent.parent / 'data'
 
-TOY_POLYDATA_PATH = __DATA_DIR_PATH / 'linear_regression/PA-1-data-text'
+TOY_POLYDATA_PATH = __DATA_DIR_PATH / 'linear_regression/poly_data'
 
 
 # get toy polynomial data
