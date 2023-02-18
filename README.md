@@ -12,13 +12,13 @@ I try to make every implementation concise, well-commented, novice-friendly and 
 
 
 
-![image-20230218123237241](C:\Users\Steve\AppData\Roaming\Typora\typora-user-images\image-20230218123237241.png)
+![image-20230218123237241](.\imgs\image-20230218123237241.png)
 
 
 
 In my implementation, if you're confused by any variable or function, just hover on it and you'll find the documents are quite informative.
 
-![image-20230218123326338](C:\Users\Steve\AppData\Roaming\Typora\typora-user-images\image-20230218123326338.png)
+![image-20230218123326338](.\imgs\image-20230218123326338.png)
 
 Hope you guys can play with these algorithms for fun.
 
