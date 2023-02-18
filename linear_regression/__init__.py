@@ -1,0 +1,5 @@
+from bayesian_regression import BayesianRegression
+from lasso_regression import  LassoRegression
+from regularized_regression import RegularizedRegression
+from robust_regression import RobustRegression
+from least_square_regression import LeastSquareRegression
