@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import multivariate_normal
 
-from utils.metrics import euclidean_distance
+from utils.metrics import euclidean_norm
 
 
 class GaussianMixture:
@@ -19,11 +19,15 @@ class GaussianMixture:
     - $\Sigma_k$ is the covariance of the k-th Gaussian distribution, i.e. self._covariances in the impl
     """
     def __init__(self, n_components: int = 1, init_mode: str = "uniform"):
+        """
+        :param n_components: (int) the number of Gaussian components
+        :param init_mode: (str) the initialization mode, default is "uniform", set to "manual" if you'd like to set parameters manually
+        """
         self.n_components = n_components
         """(int) the number of components"""
         self._weights = None
         """(np.ndarray) shape (n_components,) the weights of each component"""
-        self._means = None
+        self.means = None
         """(np.ndarray) shape (n_components, n_features) the means of each component"""
         self._covariances = None
         """(np.ndarray) shape (n_components, n_features, n_features) the covariances of each component"""
@@ -34,15 +38,15 @@ class GaussianMixture:
     def set_params(self, means: np.ndarray, covariances: np.ndarray) -> None:
         """
         Set Gaussian parameters manually: means and covariances.
+        This function will be called successfully only when `self.init_mode` is `manual`
 
         :param means: (np.ndarray) means
         :param covariances: (np.ndarray) covariances
         :return: (None)
         """
         if self.init_mode == "manual":
-            self._means = means
+            self.means = means
             self._covariances = covariances
-            self.already_init = True
         else:
             raise ValueError(f"The initialization mode is not manually.")
 
@@ -59,7 +63,7 @@ class GaussianMixture:
     # Fit the model to the given data.
     def fit(self, X: np.ndarray, iter_max: int = 100, eps: float = 1e-5) -> None:
         """
-        Fit the model to the given data.
+        Fit a Gaussian Mixture to the given data using EM Algorithm.
 
         :param X: (np.ndarray) shape (n_samples, n_features)
         :param iter_max: (int) the maximum number of iterations
@@ -77,7 +81,7 @@ class GaussianMixture:
             # M-step: update the parameters.
             self.__m_step(X, z)
             # If converged, break.
-            if euclidean_distance(self._means, self._means_old) < eps:
+            if euclidean_norm(self.means, self._means_old) < eps:
                 break
         print(f'GMM Converged in {iter_num} iterations.')
 
@@ -89,8 +93,17 @@ class GaussianMixture:
         :param X: (np.ndarray) input data, shape (n_samples, n_features)
         :return: (np.ndarray) the probability density, shape (n_samples,)
         """
-        return np.sum([self._weights[j] * multivariate_normal(X, self._means[j], self._covariances[j])
-                       for j in range(self.n_components)])
+        return np.sum(self.pdf_components(X), axis=1)
+
+    def pdf_components(self, X: np.ndarray) -> np.ndarray:
+        """
+        Calculate the probability density of the given data on each Gaussian Component
+
+        :param X: (np.ndarray) input data, shape (n_samples, n_features)
+        :return: (np.ndarray) the component probability density list, shape (n_samples, n_components)
+        """
+        return np.vstack([self._weights[j] * multivariate_normal(X, self.means[j], self.covariances[j]) for j in range(self.n_components)])
+
 
     # Initialize the parameters: weights, means and covariances.
     def __init_params(self, X: np.ndarray = None) -> None:
@@ -107,7 +120,7 @@ class GaussianMixture:
             self._weights = np.ones(self.n_components) / self.n_components
             #   2. initialize means
             ranges = np.hstack(np.min(X, axis=0).reshape(-1, 1), np.max(X, axis=0).reshape(-1, 1))
-            self._means = np.random.uniform(ranges[:, 0], ranges[:, 1],  size=(self.n_components, n_features))
+            self.means = np.random.uniform(ranges[:, 0], ranges[:, 1], size=(self.n_components, n_features))
             #  3. initialize covariances
             covs = []
             for _ in range(self.n_components):
@@ -133,7 +146,7 @@ class GaussianMixture:
         # calculate the resp matrix
         for i in range(n_samples):
             for j in range(self.n_components):
-                z[i, j] = self._weights[j] * self.pdf(X[i], self._means[j], self._covariances[j])
+                z[i, j] = self._weights[j] * self.pdf(X[i], self.means[j], self._covariances[j])
             z[i] /= np.sum(z[i])
         return z
 
@@ -152,8 +165,8 @@ class GaussianMixture:
         self._weights = np.sum(z, axis=0) / n_samples
         # update the means
         for j in range(self.n_components):
-            self._means[j] = np.sum([z[i, j] * X[i] for i in range(n_samples)], axis=0) / np.sum(z[:, j])
+            self.means[j] = np.sum([z[i, j] * X[i] for i in range(n_samples)], axis=0) / np.sum(z[:, j])
         # update the covariances
         for j in range(self.n_components):
-            self._covariances[j] = np.sum([z[i, j] * np.outer(X[i] - self._means[j], X[i] - self._means[j])
+            self._covariances[j] = np.sum([z[i, j] * np.outer(X[i] - self.means[j], X[i] - self.means[j])
                                            for i in range(n_samples)], axis=0) / np.sum(z[:, j])

@@ -1,3 +1,3 @@
 from gmm_clustering import GMMClustering
 from kmeans import KMeans
-from meanshift import MeanShift
+from mean_shift_clustering import MeanShift
