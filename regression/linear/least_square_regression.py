@@ -1,6 +1,6 @@
 import numpy as np
 
-from linear_regression.__linear_regression_base import __LinearRegressionBase
+from regression.linear.__linear_regression_base import __LinearRegressionBase
 
 
 class LeastSquareRegression(__LinearRegressionBase):

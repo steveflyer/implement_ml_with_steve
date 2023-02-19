@@ -1,0 +1,1 @@
+from regression.linear.bayesian_regression import BayesianRegression

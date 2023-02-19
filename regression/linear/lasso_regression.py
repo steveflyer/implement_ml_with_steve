@@ -1,11 +1,11 @@
 import cvxpy as cp
 
-from linear_regression.__linear_regression_base import __LinearRegressionBase
+from regression.linear.__linear_regression_base import __LinearRegressionBase
 
 
-class RobustRegression(__LinearRegressionBase):
+class LassoRegression(__LinearRegressionBase):
     """
-    Robust regression model.
+    Lasso regression model.
 
     The fitting process is to solve the following optimization problem.
 
@@ -23,7 +23,6 @@ class RobustRegression(__LinearRegressionBase):
         """(float) the regularization parameter"""
 
     def fit(self, X, y):
-        # define the optimization problem and solve it
         n_samples, n_features = X.shape
         w = cp.Variable((n_features, 1))
         objective = cp.Minimize(cp.sum_squares(X @ w - y) + self.lam * cp.norm(w, 1))

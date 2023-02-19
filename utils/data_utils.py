@@ -5,6 +5,32 @@ from pathlib import Path
 __DATA_DIR_PATH = Path(__file__).parent.parent / 'data'
 
 TOY_POLYDATA_PATH = __DATA_DIR_PATH / 'linear_regression/poly_data'
+TOY_CLUSTER_DATA_DIR = __DATA_DIR_PATH / 'clustering/toy_cluster'
+
+
+# get toy clustering data
+def get_cluster_toy_data():
+    """
+    Get the toy clustering data.
+
+    :return: (list, np.ndarray) the data list and the label set
+    """
+    CLUSTER_DATA_A_X_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataA_X.txt'
+    CLUSTER_DATA_A_Y_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataA_Y.txt'
+    CLUSTER_DATA_B_X_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataB_X.txt'
+    CLUSTER_DATA_B_Y_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataB_Y.txt'
+    CLUSTER_DATA_C_X_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataC_X.txt'
+    CLUSTER_DATA_C_Y_PATH = TOY_CLUSTER_DATA_DIR / 'cluster_data_dataC_Y.txt'
+    CLUSTER_A_X = load_mat(CLUSTER_DATA_A_X_PATH)
+    CLUSTER_B_X = load_mat(CLUSTER_DATA_B_X_PATH)
+    CLUSTER_C_X = load_mat(CLUSTER_DATA_C_X_PATH)
+    CLUSTER_A_Y = load_mat(CLUSTER_DATA_A_Y_PATH).reshape(-1)
+    CLUSTER_B_Y = load_mat(CLUSTER_DATA_B_Y_PATH).reshape(-1)
+    CLUSTER_C_Y = load_mat(CLUSTER_DATA_C_Y_PATH).reshape(-1)
+    CLUSTER_DATA_LIST = [[CLUSTER_A_X, CLUSTER_A_Y],
+                         [CLUSTER_B_X, CLUSTER_B_Y],
+                         [CLUSTER_C_X, CLUSTER_C_Y]]
+    return CLUSTER_DATA_LIST, np.array([0, 1, 2, 3])
 
 
 # get toy polynomial data
