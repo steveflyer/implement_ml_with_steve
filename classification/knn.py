@@ -22,9 +22,9 @@ class KNearestNeighbors:
     """
     def __init__(self, k: int, metric=LpMetric(p=2), classification: bool = True):
         """
-        :param k: (int)
-        :param metric:
-        :param classification:
+        :param k: (int) the number of neighbors
+        :param metric: the metric to calculate the distance between two vectors
+        :param classification: (bool) true if used for classification
         """
         self.n_neighbors = k
         """(int) the number of neighbors"""
@@ -60,7 +60,13 @@ class KNearestNeighbors:
         """
         dists = self._metric.distance(X, self._X)
         neighbors = dists.argsort()[:, :self.n_neighbors]   # the default axis is -1
-        return self.__majority_vote(neighbors)
+        if self.classification:
+            # classification
+            result = self.__majority_vote(neighbors)
+        else:
+            # regression
+            result = self.__average_vote(neighbors)
+        return result
 
     def __majority_vote(self, neighbors: np.ndarray):
         """
